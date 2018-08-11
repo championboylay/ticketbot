@@ -278,7 +278,7 @@ function receivedMessage(event) {
     // the text we received.
 
     switch (messageText) {
-      case "gettingstarted":
+      case "getstarted":
         sendInitialQuestion(senderID);
         break;
       case "showevents":
@@ -398,7 +398,7 @@ function receivedPostback(event) {
   // let them know it was successful
   // sendTextMessage(senderID, "Postback called");
   switch (payload.replace(/\s/g, "").toLowerCase()) {
-    case "gettingstarted":
+    case "getstarted":
       sendInitialQuestion(senderID);
       break;
     case "showevents":
