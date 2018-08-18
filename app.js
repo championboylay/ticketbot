@@ -336,7 +336,10 @@ function receivedMessage(event) {
         break;
 
       default:
-        sendTextMessage(senderID, messageText);
+        sendTextMessage(
+          senderID,
+          "Thanks for your messages, our admin will contact you ASAP "
+        );
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
@@ -405,13 +408,20 @@ function receivedPostback(event) {
       sendEventList(senderID);
       break;
     case "buyevent1":
+      // Facebook is limited the button to 3, So if we have more we need to show again
       showTicketList(senderID, "Event 1");
+      showTicketList2(senderID, "Event 1");
       break;
     case "buyevent2":
       showTicketList(senderID, "Event 2");
+      showTicketList2(senderID, "Event 1");
       break;
 
     default:
+      sendTextMessage(
+        senderID,
+        "Sorry I don't know what you talk about " + payload
+      );
       break;
   }
 }
@@ -442,11 +452,37 @@ function showTicketList(recipientId, eventName) {
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
               title: "VIP (10000)"
-            },
+            }
+          ]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function showTicketList2(recipientId, eventName) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "Ticket Types for " + eventName,
+          buttons: [
             {
               type: "web_url",
               url: "https://www.oculus.com/en-us/rift/",
               title: "VVIP (20000)"
+            },
+            {
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "Villa VVIP (30000)"
             }
           ]
         }
