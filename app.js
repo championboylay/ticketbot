@@ -407,7 +407,7 @@ function receivedPostback(event) {
     case "buyevent1":
       showTicketList(senderID, "Event 1");
       break;
-    case "buyevent1":
+    case "buyevent2":
       showTicketList(senderID, "Event 2");
       break;
 
@@ -425,33 +425,28 @@ function showTicketList(recipientId, eventName) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "generic",
-          elements: [
+          template_type: "button",
+          text: "Ticket Types for " + eventName,
+          buttons: [
             {
-              title: "Event 1",
-              subtitle: "Full Moon Party",
-              item_url: "https://www.oculus.com/en-us/rift/",
-              image_url: SERVER_URL + "/assets/rift.png",
-              buttons: [
-                {
-                  type: "postback",
-                  title: "Buy",
-                  payload: "Buy event1"
-                }
-              ]
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "GA (30000)"
             },
             {
-              title: "Water Festival",
-              subtitle: "JUMP JUMP",
-              item_url: "https://www.oculus.com/en-us/touch/",
-              image_url: SERVER_URL + "/assets/touch.png",
-              buttons: [
-                {
-                  type: "postback",
-                  title: "Buy",
-                  payload: "Buy event2"
-                }
-              ]
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "PGA (50000)"
+            },
+            {
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "VIP (10000)"
+            },
+            {
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "VVIP (20000)"
             }
           ]
         }
@@ -572,9 +567,9 @@ function sendEventList(recipientId) {
               image_url: SERVER_URL + "/assets/rift.png",
               buttons: [
                 {
-                  type: "web_url",
-                  url: "https://www.oculus.com/en-us/rift/",
-                  title: "Buy Ticket"
+                  type: "postback",
+                  title: "Show me the ticket type",
+                  payload: "buyevent1"
                 }
               ]
             },
@@ -585,9 +580,9 @@ function sendEventList(recipientId) {
               image_url: SERVER_URL + "/assets/touch.png",
               buttons: [
                 {
-                  type: "web_url",
-                  url: "https://www.oculus.com/en-us/rift/",
-                  title: "Buy Ticket"
+                  type: "postback",
+                  title: "Show me the ticket type",
+                  payload: "buyevent2"
                 }
               ]
             }
