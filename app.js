@@ -17,6 +17,9 @@ const bodyParser = require("body-parser"),
   https = require("https"),
   request = require("request");
 
+const edm = require("./edm.js");
+const ticketType = require("./ticket_types.js");
+
 var app = express();
 app.set("port", process.env.PORT || 5000);
 app.set("view engine", "ejs");
@@ -49,6 +52,10 @@ const PAGE_ACCESS_TOKEN = process.env.MESSENGER_PAGE_ACCESS_TOKEN
 const SERVER_URL = process.env.SERVER_URL
   ? process.env.SERVER_URL
   : config.get("serverURL");
+
+const BACKEND_SERVER_URL = config.get("backendServerURL");
+
+const edms = edm.getEDMJSON(SERVER_URL);
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");
@@ -283,58 +290,6 @@ function receivedMessage(event) {
         break;
       case "showevents":
         sendEventList(senderID);
-      case "image":
-        sendImageMessage(senderID);
-        break;
-
-      case "gif":
-        sendGifMessage(senderID);
-        break;
-
-      case "audio":
-        sendAudioMessage(senderID);
-        break;
-
-      case "video":
-        sendVideoMessage(senderID);
-        break;
-
-      case "file":
-        sendFileMessage(senderID);
-        break;
-
-      case "button":
-        sendButtonMessage(senderID);
-        break;
-
-      case "generic":
-        sendGenericMessage(senderID);
-        break;
-
-      case "receipt":
-        sendReceiptMessage(senderID);
-        break;
-
-      case "quick reply":
-        sendQuickReply(senderID);
-        break;
-
-      case "read receipt":
-        sendReadReceipt(senderID);
-        break;
-
-      case "typing on":
-        sendTypingOn(senderID);
-        break;
-
-      case "typing off":
-        sendTypingOff(senderID);
-        break;
-
-      case "account linking":
-        sendAccountLinking(senderID);
-        break;
-
       default:
         sendTextMessage(
           senderID,
@@ -408,13 +363,34 @@ function receivedPostback(event) {
       sendEventList(senderID);
       break;
     case "buyevent1":
-      // Facebook is limited the button to 3, So if we have more we need to show again
-      showTicketList(senderID, "Event 1");
-      showTicketList2(senderID, "Event 1");
+      // Facebook is limited the button to 3, So if we have more we need to show again.showTicketsByEvent
+      ticketType.showTicketsByEvent(
+        senderID,
+        "Event 1",
+        BACKEND_SERVER_URL,
+        callSendAPI
+      );
+      ticketType.showTicketsByEvent2(
+        senderID,
+        "Event 1",
+        BACKEND_SERVER_URL,
+        callSendAPI
+      );
+
       break;
     case "buyevent2":
-      showTicketList(senderID, "Event 2");
-      showTicketList2(senderID, "Event 1");
+      ticketType.showTicketsByEvent(
+        senderID,
+        "Event 2",
+        BACKEND_SERVER_URL,
+        callSendAPI
+      );
+      ticketType.showTicketsByEvent2(
+        senderID,
+        "Event 2",
+        BACKEND_SERVER_URL,
+        callSendAPI
+      );
       break;
 
     default:
@@ -424,73 +400,6 @@ function receivedPostback(event) {
       );
       break;
   }
-}
-
-function showTicketList(recipientId, eventName) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "button",
-          text: "Ticket Types for " + eventName,
-          buttons: [
-            {
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "GA (30000)"
-            },
-            {
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "PGA (50000)"
-            },
-            {
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "VIP (10000)"
-            }
-          ]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-function showTicketList2(recipientId, eventName) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "button",
-          text: "Ticket Types for " + eventName,
-          buttons: [
-            {
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "VVIP (20000)"
-            },
-            {
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Villa VVIP (30000)"
-            }
-          ]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
 }
 
 /*
@@ -557,8 +466,8 @@ function sendInitialQuestion(recipientId) {
             {
               title: "Welcome",
               subtitle: "You can inquiry about tickets",
-              item_url: "https://www.oculus.com/en-us/rift/",
-              image_url: SERVER_URL + "/assets/rift.png",
+              item_url: "https://www.facebook.com/mmravergyi/",
+              image_url: "http://oi67.tinypic.com/2qk8o05.jpg",
               buttons: [
                 {
                   type: "postback",
@@ -586,6 +495,8 @@ function sendInitialQuestion(recipientId) {
  *
  */
 function sendEventList(recipientId) {
+  console.log(edms);
+
   var messageData = {
     recipient: {
       id: recipientId
@@ -595,34 +506,7 @@ function sendEventList(recipientId) {
         type: "template",
         payload: {
           template_type: "generic",
-          elements: [
-            {
-              title: "EDM",
-              subtitle: "Full Moon Party",
-              item_url: "https://www.oculus.com/en-us/rift/",
-              image_url: SERVER_URL + "/assets/rift.png",
-              buttons: [
-                {
-                  type: "postback",
-                  title: "Show me the ticket type",
-                  payload: "buyevent1"
-                }
-              ]
-            },
-            {
-              title: "Water Festival",
-              subtitle: "JUMP JUMP",
-              item_url: "https://www.oculus.com/en-us/touch/",
-              image_url: SERVER_URL + "/assets/touch.png",
-              buttons: [
-                {
-                  type: "postback",
-                  title: "Show me the ticket type",
-                  payload: "buyevent2"
-                }
-              ]
-            }
-          ]
+          elements: edms
         }
       }
     }
