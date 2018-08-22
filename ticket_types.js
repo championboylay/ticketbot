@@ -28,14 +28,22 @@ exports.showTicketsByEvent = function(
             },
             {
               type: "web_url",
-              url: callbackURL,
+              url:
+                callbackURL +
+                "?event=" +
+                eventName +
+                "&ticket=PGA (50000)&price=50000",
               title: "PGA (50000)",
               webview_height_ratio: "tall"
             },
             {
               type: "web_url",
-              url: callbackURL,
-              title: "VIP (10000)",
+              url:
+                callbackURL +
+                "?event=" +
+                eventName +
+                "&ticket=VIP (10000)&price=80000",
+              title: "VIP (80000)",
               webview_height_ratio: "compact"
             }
           ]
@@ -65,12 +73,20 @@ exports.showTicketsByEvent2 = function(
           buttons: [
             {
               type: "web_url",
-              url: backend_server,
-              title: "VVIP (60000)"
+              url:
+                callbackURL +
+                "?event=" +
+                eventName +
+                "&ticket=VVIP (10000)&price=90000",
+              title: "VVIP (90000)"
             },
             {
               type: "web_url",
-              url: backend_server,
+              url:
+                callbackURL +
+                "?event=" +
+                eventName +
+                "&ticket=Super VIP (10000)&price=520000",
               title: "Super VIP (520000)"
             }
           ]
