@@ -1,0 +1,185 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1 ,maximum-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <title>Myanmar Raver Gyi</title>
+    <style>
+        .first {
+            padding: 50px;
+        }
+
+        .second {
+            margin: 20px;
+            margin-top: 0px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+
+        window.extAsyncInit = () => {
+            // TODO: How to parse env file from here?
+            MessengerExtensions.getSupportedFeatures(function success(result) {
+                let features = result.supported_features;
+                if (features.includes("context")) {
+                    MessengerExtensions.getContext('<APP_ID>',
+                        function success(thread_context) {
+                            // success
+                            document.getElementById("psid").value = thread_context.psid;
+                        },
+                        function error(err) {
+                            // error
+                            console.log(err);
+                        }
+                    );
+                }
+            }, function error(err) {
+                // error retrieving supported features
+                console.log(err);
+            });
+            document.getElementById('submitButton').addEventListener('click', () => {
+                MessengerExtensions.requestCloseBrowser(function success() {
+
+                }, function error(err) {
+                    console.log(err);
+                    alert(err)
+                });
+            });
+        };
+
+    </script>
+
+    <div class="main-wrapper">
+        <!-- Welcome screen -->
+        <div class="first row justify-content-center">
+            <div class="row justify-content-center">
+                <img src="http://oi67.tinypic.com/2qk8o05.jpg" alt="Myanmar Raver Gyi" height="200" class="img-thumbnail col-md-2 col-md-offset-5">
+            </div>
+            <blockquote class="blockquote" style="margin-top:15px">
+                <p>လက္မွတ္ 1ေစာင္တည္းအတြက္ ပို႔ခ ၁၀၀၀ က်ပ္ေပါင္းၿပီး၊ 2ေစာင္မွာတာနဲ႔ Free Delivery ပါ။</p>
+            </blockquote>
+
+            <button type="button" class="btn btn-primary btn-lg btn-lg btn-block" id="firstBtn">NEXT</button>
+        </div>
+
+        <!-- Entry form screen -->
+        <div class="second ">
+            <h4 style="text-align: center">User Information</h4>
+            <form>
+                <div class="form-group">
+                    <input type="text" id="userName" class="form-control" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="userPhone" class="form-control" placeholder="09******">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="userAddress" placeholder="Address" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" id="eventName" class="form-control" placeholder="EDM event name">
+                </div>
+                <div class="form-group">
+                    <label for="ticketType">Ticket Type</label>
+                    <input type="text" id="ticketType" class="form-control" placeholder="Ticket Type">
+                    <div class="" id="ticketPrice"> Price : </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Number of Ticket</label>
+                    <input type="text" value="1" class="form-control" placeholder="Number of ticket">
+                </div>
+            </form>
+            <button type="button" id="submitButton" class="btn btn-primary btn-lg btn-lg btn-block" id="firstBtn">SUBMIT</button>
+        </div>
+        <div class="third ">
+
+        </div>
+
+    </div>
+    <!--  <form action="/optionspostback " method="get ">
+        <input type="hidden " name="psid " id="psid ">
+        <h3>Pillows</h3>
+        <input type="radio " name="pillows " value="soft " checked>Soft<br>
+        <input type="radio " name="pillows " value="hard ">Hard<br>
+        <h3>Bed</h3>
+        <input type="radio " name="bed " value="single " checked>Single<br>
+        <input type="radio " name="bed " value="double ">Double<br>
+        <input type="radio " name="bed " value="twin ">Twin<br>
+        <h3>View</h3>
+        <input type="radio " name="view " value="sea " checked>Sea<br>
+        <input type="radio " name="view " value="street ">Street<br>
+        <input type="submit " value="Submit " id="submitButton ">
+    </form> -->
+
+    <script>
+        $(document).ready(function () {
+            // init the display options
+            $(".first").show();
+            $(".second").hide();
+            $(".third").hide();
+
+            // init event name ticket type
+            var url_string = window.location.href
+            var url = new URL(url_string);
+            var event = url.searchParams.get("event");
+            var ticket = url.searchParams.get("ticket");
+            var price = url.searchParams.get("price");
+            $("#eventName").val(event);
+            $("#ticketType").val(ticket);
+            $("#ticketPrice").html("Price is :" + price + " Kyats");
+
+            $("#firstBtn").on('click', function () {
+                $(".first").hide();
+                $(".second").show();
+                $(".third").hide();
+            })
+
+            // UX function
+            $("#userName").on("keypress", function (e) {
+                if (e.which == 13) {
+                    $("#userPhone").focus();
+                }
+            });
+            $("#userPhone").on("keypress", function (e) {
+                if (e.which == 13) {
+                    $("#userAddress").focus();
+                }
+            });
+            // If user change ticket type, remove the price
+            $("#ticketType").on("change paste keyup", function (e) {
+                console.log($(this).val(), " ", ticket);
+                if ($(this).val() !== ticket) {
+                    $("#ticketPrice").html("Price is :" + + " Kyats");
+                } else {
+                    $("#ticketPrice").html("Price is :" + price + " Kyats");
+                }
+
+
+
+            });
+        })
+    </script>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ exports.showTicketsByEvent = function(
   backend_server,
   callback
 ) {
+  const callbackURL = backend_server + "/options";
   const messageData = {
     recipient: {
       id: recipientId
@@ -17,18 +18,25 @@ exports.showTicketsByEvent = function(
           buttons: [
             {
               type: "web_url",
-              url: backend_server,
-              title: "GA (30000)"
+              url:
+                callbackURL +
+                "?event=" +
+                eventName +
+                "&ticket=General Access (GA)&price=30000",
+              title: "GA (30000)",
+              webview_height_ratio: "full"
             },
             {
               type: "web_url",
-              url: backend_server,
-              title: "PGA (50000)"
+              url: callbackURL,
+              title: "PGA (50000)",
+              webview_height_ratio: "tall"
             },
             {
               type: "web_url",
-              url: backend_server,
-              title: "VIP (10000)"
+              url: callbackURL,
+              title: "VIP (10000)",
+              webview_height_ratio: "compact"
             }
           ]
         }
