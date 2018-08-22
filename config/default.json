@@ -2,6 +2,6 @@
   "appSecret": "04d283dbf1aabbd33adc88b4d051b418",
   "pageAccessToken": "EAAMB9KWeXMcBAMBVmcZACMItiX2rEleBGd2kMZBKmgAXDKwuyEwMI9ZAGZC2fIEhFJGpZCe7Ltvnr3YyLRjZAjYsrlZA21nSXG2fKIovG1DmwAOAwnNVfPkQ0wZBmGSXpMU5QorWHtHVuKhzeKzbzT0uoqBFga33UkLdRZASYDjZANGGMNfnrP3ekP",
   "validationToken": "tweetos",
-  "serverURL": "https://335a6931.ngrok.io",
-  "backendServerURL": "https://8119371f.ngrok.io"
+  "serverURL": "https://boiling-anchorage-82650.herokuapp.com",
+  "backendServerURL": "https://boiling-anchorage-82650.herokuapp.com"
 }
